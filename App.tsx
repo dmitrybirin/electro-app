@@ -32,7 +32,7 @@ const App = () => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.mainText}>Electro</Text>
-      <Text style={styles.bodyText}>Planned solar consumtion for the next 24 hours</Text>
+      <Text style={styles.bodyText}>Planned solar production for the next 24 hours</Text>
       {loading || !data ? (
         <ActivityIndicator />
       ) : (
