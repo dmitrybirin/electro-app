@@ -4,6 +4,7 @@ import { get } from './request';
 const DEFAULT_OFFSET = 12;
 
 export async function getSolarData(start: string, end: string) {
+  console.log({ start, end });
   const url = `https://dashboard.elering.ee/api/system/with-plan?start=${start}&end=${end}`;
 
   const data = await get<PlanResult>(url);

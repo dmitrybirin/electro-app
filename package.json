@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "react": "18.1.0",
-    "react-native": "0.70.6"
+    "react-native": "0.70.6",
+    "react-native-gifted-charts": "^1.2.42",
+    "react-native-linear-gradient": "^2.6.2",
+    "react-native-svg": "^13.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
