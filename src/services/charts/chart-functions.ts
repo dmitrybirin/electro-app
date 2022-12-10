@@ -1,4 +1,4 @@
-import { addHours } from 'date-fns';
+import { addHours, isToday, isYesterday, isTomorrow } from 'date-fns';
 import { GraphData, PlanResult } from '../../types';
 
 export function getSolarPlanChartData(planData: PlanResult): GraphData[] {
@@ -12,5 +12,22 @@ export function getSolarPlanChartData(planData: PlanResult): GraphData[] {
 
 export function getGraphTimeRange(): [Date, Date] {
   const now = new Date();
-  return [now, addHours(now, 5)];
+  return [addHours(now, -3), addHours(now, 3)];
+}
+
+export function formatTimeTicks(tick: Date): string {
+  let subTitle = '';
+
+  if (isToday(tick)) {
+    subTitle = 'today';
+  }
+
+  if (isYesterday(tick)) {
+    subTitle = 'yesterday';
+  }
+  if (isTomorrow(tick)) {
+    subTitle = 'tomorrow';
+  }
+
+  return `${tick.getHours()}h\n${subTitle}`;
 }

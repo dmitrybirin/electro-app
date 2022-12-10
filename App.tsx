@@ -1,9 +1,15 @@
 import React from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { VictoryChart, VictoryBar, VictoryZoomContainer, VictoryAxis } from 'victory-native';
+import {
+  VictoryChart,
+  VictoryBar,
+  VictoryZoomContainer,
+  VictoryAxis,
+  VictoryLabel,
+} from 'victory-native';
 
 import { getSolarDataForNow } from './src/services/api';
-import { getGraphTimeRange, getSolarPlanChartData } from './src/services/charts';
+import { getGraphTimeRange, getSolarPlanChartData, formatTimeTicks } from './src/services/charts';
 import { GraphData } from './src/types';
 
 const App = () => {
@@ -36,6 +42,7 @@ const App = () => {
       ) : (
         <View style={styles.graph}>
           <VictoryChart
+            height={500}
             domainPadding={24}
             scale={{ x: 'time', y: 'linear' }}
             containerComponent={
@@ -46,8 +53,15 @@ const App = () => {
               />
             }>
             <VictoryAxis
+              tickLabelComponent={
+                <VictoryLabel
+                  backgroundPadding={8}
+                  style={[styles.labelTitle, styles.labelSubTitle]}
+                  angle={-45}
+                />
+              }
               tickValues={solarData.map(point => point.timestamp)}
-              tickFormat={tick => `${tick.getHours()}h`}
+              tickFormat={formatTimeTicks}
             />
             <VictoryAxis dependentAxis />
 
@@ -86,6 +100,12 @@ const styles = StyleSheet.create({
   },
   graph: {
     paddingTop: 32,
+  },
+  labelTitle: {
+    fontSize: 18,
+  },
+  labelSubTitle: {
+    fontSize: 8,
   },
 });
 
