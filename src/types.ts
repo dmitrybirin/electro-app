@@ -29,6 +29,6 @@ export interface PlanResult {
 }
 
 export interface GraphData {
-  hour: number;
+  timestamp: Date;
   solar: number;
 }

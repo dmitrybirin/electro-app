@@ -3,11 +3,11 @@ import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-n
 import { VictoryChart, VictoryBar, VictoryZoomContainer, VictoryAxis } from 'victory-native';
 
 import { getSolarDataForNow } from './src/services/api';
-import { getSolarPlanChartData } from './src/services/charts';
+import { getGraphTimeRange, getSolarPlanChartData } from './src/services/charts';
 import { GraphData } from './src/types';
 
 const App = () => {
-  const [solarData, setSolarData] = React.useState<GraphData[] | null>(null);
+  const [solarData, setSolarData] = React.useState<GraphData[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
 
@@ -27,35 +27,33 @@ const App = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const data = solarData;
-
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.mainText}>Electro</Text>
       <Text style={styles.bodyText}>Planned solar production for the next 24 hours</Text>
-      {loading || !data ? (
+      {loading || !solarData.length ? (
         <ActivityIndicator />
       ) : (
         <View style={styles.graph}>
           <VictoryChart
             domainPadding={24}
+            scale={{ x: 'time' }}
             containerComponent={
               <VictoryZoomContainer
                 allowZoom={false}
-                zoomDomain={{ x: [new Date().getHours(), new Date().getHours() + 5] }}
-                // onZoomDomainChange={(domain, props) => console.log(props.)}
+                zoomDomain={{ x: getGraphTimeRange() }}
                 allowPan={true}
               />
             }>
             <VictoryAxis
-              tickValues={data.map(point => point.hour)}
-              tickFormat={tick => `${tick}h`}
+              tickValues={solarData.map(point => point.timestamp)}
+              tickFormat={tick => `${tick.getHours()}h`}
             />
             <VictoryAxis dependentAxis />
 
             <VictoryBar
-              data={data}
-              x="hour"
+              data={solarData}
+              x="timestamp"
               y="solar"
               animate={{
                 onLoad: { duration: 500 },
