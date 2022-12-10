@@ -1,32 +1,31 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
-
-async function getSolarData(start: string, end: string) {
-  const url = `https://dashboard.elering.ee/api/system/with-plan?start=${start}&end=${end}`;
-
-  const response = await fetch(url);
-
-  const data = await response.json();
-  return data;
-}
+import { getSolarDataForNow } from './src/services/api';
+import { PlanResult } from './src/types';
 
 const App = () => {
-  const [solarData, setSolarData] = React.useState({});
+  const [solarData, setSolarData] = React.useState<PlanResult>({ real: [], plan: [] });
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   React.useEffect(() => {
-    const now = new Date();
-
-    const start = new Date(new Date(now).setHours(-12)).toISOString();
-    const end = new Date(new Date(now).setHours(12)).toISOString();
-    getSolarData(start, end)
-      .then(data => setSolarData(data.data))
-      .catch(err => console.warn(err));
+    getSolarDataForNow()
+      .then(result => {
+        if (result.success && result.data) {
+          setSolarData(result.data);
+        } else {
+          if (result.errorMessages) {
+            setErrorMessage(result.errorMessages[0]);
+          }
+        }
+      })
+      .catch(err => setErrorMessage(err));
   }, []);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.mainText}>Electro</Text>
-      <Text style={styles.mainText}>{JSON.stringify(solarData)}</Text>
+      <Text style={styles.mainText}>{JSON.stringify(solarData.plan)}</Text>
+      <Text style={styles.errorMessage}>{errorMessage}</Text>
     </SafeAreaView>
   );
 };
@@ -40,6 +39,10 @@ const styles = StyleSheet.create({
   },
   mainText: {
     fontSize: 24,
+  },
+  errorMessage: {
+    fontSize: 24,
+    color: 'red',
   },
 });
 
