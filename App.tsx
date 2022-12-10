@@ -1,19 +1,12 @@
 import React from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from 'react-native';
-import {
-  VictoryChart,
-  VictoryBar,
-  VictoryZoomContainer,
-  VictoryAxis,
-  VictoryLabel,
-} from 'victory-native';
+import { Chart } from './src/Chart';
 
 import { getSolarDataForNow } from './src/services/api';
-import { getGraphTimeRange, getSolarChartData, formatTimeTicks } from './src/services/charts';
-import { GraphData } from './src/types';
+import { PlanResult } from './src/types';
 
 const App = () => {
-  const [solarData, setSolarData] = React.useState<GraphData[]>([]);
+  const [solarData, setSolarData] = React.useState<PlanResult>({ real: [], plan: [] });
   const [loading, setLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
 
@@ -22,7 +15,7 @@ const App = () => {
     getSolarDataForNow()
       .then(result => {
         if (result.success && result.data) {
-          setSolarData(getSolarChartData(result.data));
+          setSolarData(result.data);
         } else {
           if (result.errorMessages) {
             setErrorMessage(result.errorMessages[0]);
@@ -37,44 +30,7 @@ const App = () => {
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.mainText}>Electro</Text>
       <Text style={styles.bodyText}>Planned solar production for the next 24 hours</Text>
-      {loading || !solarData.length ? (
-        <ActivityIndicator />
-      ) : (
-        <VictoryChart
-          height={500}
-          domainPadding={24}
-          scale={{ x: 'time', y: 'linear' }}
-          containerComponent={
-            <VictoryZoomContainer
-              allowZoom={false}
-              zoomDomain={{ x: getGraphTimeRange() }}
-              allowPan={true}
-            />
-          }>
-          <VictoryAxis
-            tickLabelComponent={
-              <VictoryLabel
-                backgroundPadding={8}
-                style={[styles.labelTitle, styles.labelSubTitle]}
-                angle={-45}
-              />
-            }
-            tickValues={solarData.map(point => point.timestamp)}
-            tickFormat={formatTimeTicks}
-          />
-          <VictoryAxis dependentAxis />
-
-          <VictoryBar
-            barWidth={24}
-            data={solarData}
-            x="timestamp"
-            y="solar"
-            animate={{
-              onLoad: { duration: 500 },
-            }}
-          />
-        </VictoryChart>
-      )}
+      {loading || !solarData.plan?.length ? <ActivityIndicator /> : <Chart data={solarData} />}
       <Text style={styles.errorMessage}>{errorMessage}</Text>
     </SafeAreaView>
   );
