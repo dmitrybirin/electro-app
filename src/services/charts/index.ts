@@ -1,1 +1,1 @@
-export { getSolarRealChartData } from './chart-functions';
+export { getSolarPlanChartData } from './chart-functions';

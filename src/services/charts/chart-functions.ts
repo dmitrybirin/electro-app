@@ -1,6 +1,6 @@
 import { GraphData, PlanResult } from '../../types';
 
-export function getSolarRealChartData(planData: PlanResult): GraphData[] {
+export function getSolarPlanChartData(planData: PlanResult): GraphData[] {
   return planData.plan.map(data => {
     return {
       hour: new Date(data.timestamp * 1000).getHours(),

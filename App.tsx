@@ -3,7 +3,7 @@ import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-n
 import { VictoryChart, VictoryBar, VictoryZoomContainer, VictoryAxis } from 'victory-native';
 
 import { getSolarDataForNow } from './src/services/api';
-import { getSolarRealChartData } from './src/services/charts';
+import { getSolarPlanChartData } from './src/services/charts';
 import { GraphData } from './src/types';
 
 const App = () => {
@@ -16,7 +16,7 @@ const App = () => {
     getSolarDataForNow()
       .then(result => {
         if (result.success && result.data) {
-          setSolarData(getSolarRealChartData(result.data));
+          setSolarData(getSolarPlanChartData(result.data));
         } else {
           if (result.errorMessages) {
             setErrorMessage(result.errorMessages[0]);
@@ -40,7 +40,12 @@ const App = () => {
           <VictoryChart
             domainPadding={24}
             containerComponent={
-              <VictoryZoomContainer allowZoom={false} zoomDomain={{ x: [18, 24] }} />
+              <VictoryZoomContainer
+                allowZoom={false}
+                zoomDomain={{ x: [new Date().getHours(), new Date().getHours() + 5] }}
+                // onZoomDomainChange={(domain, props) => console.log(props.)}
+                allowPan={true}
+              />
             }>
             <VictoryAxis
               tickValues={data.map(point => point.hour)}
@@ -53,8 +58,7 @@ const App = () => {
               x="hour"
               y="solar"
               animate={{
-                duration: 2000,
-                onLoad: { duration: 1000 },
+                onLoad: { duration: 500 },
               }}
             />
           </VictoryChart>
