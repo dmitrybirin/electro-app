@@ -18,7 +18,18 @@ Overall work done:
 
 Not done, but needed:
 - interactivity for the graph
+- icon for the app
 - tests for fetching and the data functions
-- refactor different react components from App (for now it's not too much)
-- check the actual data and dates :)
 - use date-fns for dates
+- check the actual data and dates :)
+- refactor different react components from App (for now it's not too much)
+
+## Instructions to run
+
+```bash
+npm i
+cd ios && bundle exec pod install 
+npm run ios
+```
+
+You can also use npx pod-install for installing Pods for iOS
