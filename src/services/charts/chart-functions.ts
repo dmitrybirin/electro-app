@@ -1,11 +1,21 @@
 import { addHours, isToday, isYesterday, isTomorrow } from 'date-fns';
-import { GraphData, PlanResult } from '../../types';
+import { GraphData, HourConsumption, PlanResult } from '../../types';
 
-export function getSolarPlanChartData(planData: PlanResult): GraphData[] {
-  return planData.plan.map(data => {
+function makeObjectWithTimestampKey(data: HourConsumption[]): Record<number, HourConsumption> {
+  return data.reduce((acc, next) => ({ ...acc, [next.timestamp]: next }), {});
+}
+
+export function getSolarChartData(planData: PlanResult): GraphData[] {
+  const realData = makeObjectWithTimestampKey(planData.real);
+
+  const plannedData = makeObjectWithTimestampKey(planData.plan);
+  // We are merging the objects here, cause realdata don't have all timestampts needed, so we're replacing missing timestamps by planned
+
+  return Object.values({ ...plannedData, ...realData }).map(data => {
     return {
       timestamp: new Date(data.timestamp * 1000),
-      solar: data.solar_energy_forecast || 0,
+      solar: data?.solar_energy_production || data?.solar_energy_forecast || 0,
+      fill: data?.solar_energy_forecast ? 'blue' : 'red',
     };
   });
 }

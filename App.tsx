@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from 'react-native';
 import {
   VictoryChart,
   VictoryBar,
@@ -9,7 +9,7 @@ import {
 } from 'victory-native';
 
 import { getSolarDataForNow } from './src/services/api';
-import { getGraphTimeRange, getSolarPlanChartData, formatTimeTicks } from './src/services/charts';
+import { getGraphTimeRange, getSolarChartData, formatTimeTicks } from './src/services/charts';
 import { GraphData } from './src/types';
 
 const App = () => {
@@ -22,7 +22,7 @@ const App = () => {
     getSolarDataForNow()
       .then(result => {
         if (result.success && result.data) {
-          setSolarData(getSolarPlanChartData(result.data));
+          setSolarData(getSolarChartData(result.data));
         } else {
           if (result.errorMessages) {
             setErrorMessage(result.errorMessages[0]);
@@ -40,41 +40,40 @@ const App = () => {
       {loading || !solarData.length ? (
         <ActivityIndicator />
       ) : (
-        <View style={styles.graph}>
-          <VictoryChart
-            height={500}
-            domainPadding={24}
-            scale={{ x: 'time', y: 'linear' }}
-            containerComponent={
-              <VictoryZoomContainer
-                allowZoom={false}
-                zoomDomain={{ x: getGraphTimeRange() }}
-                allowPan={true}
+        <VictoryChart
+          height={500}
+          domainPadding={24}
+          scale={{ x: 'time', y: 'linear' }}
+          containerComponent={
+            <VictoryZoomContainer
+              allowZoom={false}
+              zoomDomain={{ x: getGraphTimeRange() }}
+              allowPan={true}
+            />
+          }>
+          <VictoryAxis
+            tickLabelComponent={
+              <VictoryLabel
+                backgroundPadding={8}
+                style={[styles.labelTitle, styles.labelSubTitle]}
+                angle={-45}
               />
-            }>
-            <VictoryAxis
-              tickLabelComponent={
-                <VictoryLabel
-                  backgroundPadding={8}
-                  style={[styles.labelTitle, styles.labelSubTitle]}
-                  angle={-45}
-                />
-              }
-              tickValues={solarData.map(point => point.timestamp)}
-              tickFormat={formatTimeTicks}
-            />
-            <VictoryAxis dependentAxis />
+            }
+            tickValues={solarData.map(point => point.timestamp)}
+            tickFormat={formatTimeTicks}
+          />
+          <VictoryAxis dependentAxis />
 
-            <VictoryBar
-              data={solarData}
-              x="timestamp"
-              y="solar"
-              animate={{
-                onLoad: { duration: 500 },
-              }}
-            />
-          </VictoryChart>
-        </View>
+          <VictoryBar
+            barWidth={24}
+            data={solarData}
+            x="timestamp"
+            y="solar"
+            animate={{
+              onLoad: { duration: 500 },
+            }}
+          />
+        </VictoryChart>
       )}
       <Text style={styles.errorMessage}>{errorMessage}</Text>
     </SafeAreaView>
@@ -97,9 +96,6 @@ const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 24,
     color: 'red',
-  },
-  graph: {
-    paddingTop: 32,
   },
   labelTitle: {
     fontSize: 18,

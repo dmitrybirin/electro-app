@@ -1,4 +1,4 @@
-export interface HourConsumptionReal {
+export interface HourConsumption {
   timestamp: number;
   production: number;
   consumption: number;
@@ -7,25 +7,14 @@ export interface HourConsumptionReal {
   system_balance: number;
   ac_balance: number;
   production_renewable: number;
+  solar_energy_forecast?: number;
   solar_energy_production: number;
-}
-
-export interface HourConsumptionPlanned {
-  timestamp: number;
-  production: number;
-  consumption: number;
-  losses: number;
-  frequency: number;
-  system_balance: number;
-  ac_balance: number;
-  production_renewable: number;
-  solar_energy_forecast: null;
-  solar_energy_forecast_operator: null;
+  solar_energy_forecast_operator?: number;
 }
 
 export interface PlanResult {
-  real: HourConsumptionReal[];
-  plan: HourConsumptionPlanned[];
+  real: HourConsumption[];
+  plan: HourConsumption[];
 }
 
 export interface GraphData {

@@ -1,1 +1,1 @@
-export { getSolarPlanChartData, getGraphTimeRange, formatTimeTicks } from './chart-functions';
+export { getSolarChartData, getGraphTimeRange, formatTimeTicks } from './chart-functions';
