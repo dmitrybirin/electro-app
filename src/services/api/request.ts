@@ -10,7 +10,6 @@ const request = async <T = any>(
 ): Promise<BaseResponseData<T>> => {
   try {
     const response = await fetch(input, init);
-    const data = await response.json();
     if (!response.ok) {
       try {
         const errorData = await response.json();
@@ -19,6 +18,7 @@ const request = async <T = any>(
         return { success: false, errorMessages: [error?.message || error.toString()], data: null };
       }
     } else {
+      const data = await response.json();
       return { success: true, data: data.data };
     }
   } catch (error) {
