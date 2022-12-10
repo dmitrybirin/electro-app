@@ -1,11 +1,11 @@
+import { addHours } from 'date-fns';
 import { PlanResult } from '../../types';
 import { get } from './request';
 
 const DEFAULT_OFFSET = 12;
 
-export async function getSolarData(start: string, end: string) {
-  console.log({ start, end });
-  const url = `https://dashboard.elering.ee/api/system/with-plan?start=${start}&end=${end}`;
+export async function getSolarData(start: Date, end: Date) {
+  const url = `https://dashboard.elering.ee/api/system/with-plan?start=${start.toISOString()}&end=${end.toISOString()}`;
 
   const data = await get<PlanResult>(url);
   return data;
@@ -17,8 +17,9 @@ export async function getSolarDataForNow(offset?: number) {
   }
   const now = new Date();
 
-  const start = new Date(new Date(now).setHours((offset || DEFAULT_OFFSET) * -1)).toISOString();
-  const end = new Date(new Date(now).setHours(offset || DEFAULT_OFFSET)).toISOString();
+  const start = addHours(now, (offset || DEFAULT_OFFSET) * -1);
+  const end = addHours(now, offset || DEFAULT_OFFSET);
+  const data = await getSolarData(start, end);
 
-  return getSolarData(start, end);
+  return data;
 }
