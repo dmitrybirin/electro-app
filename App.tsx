@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { LineChart } from 'react-native-gifted-charts';
+import { VictoryChart, VictoryBar, VictoryZoomContainer, VictoryAxis } from 'victory-native';
 
 import { getSolarDataForNow } from './src/services/api';
 import { getSolarRealChartData } from './src/services/charts';
@@ -37,7 +37,27 @@ const App = () => {
         <ActivityIndicator />
       ) : (
         <View style={styles.graph}>
-          <LineChart data={data} curved={true} width={250} color1="blue" dataPointsColor1="blue" />
+          <VictoryChart
+            domainPadding={24}
+            containerComponent={
+              <VictoryZoomContainer allowZoom={false} zoomDomain={{ x: [18, 24] }} />
+            }>
+            <VictoryAxis
+              tickValues={data.map(point => point.hour)}
+              tickFormat={tick => `${tick}h`}
+            />
+            <VictoryAxis dependentAxis />
+
+            <VictoryBar
+              data={data}
+              x="hour"
+              y="solar"
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 },
+              }}
+            />
+          </VictoryChart>
         </View>
       )}
       <Text style={styles.errorMessage}>{errorMessage}</Text>

@@ -29,7 +29,6 @@ export interface PlanResult {
 }
 
 export interface GraphData {
-  value: number;
-  label: string;
-  labelComponent: any;
+  hour: number;
+  solar: number;
 }
