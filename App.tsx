@@ -37,7 +37,7 @@ const App = () => {
         <View style={styles.graph}>
           <VictoryChart
             domainPadding={24}
-            scale={{ x: 'time' }}
+            scale={{ x: 'time', y: 'linear' }}
             containerComponent={
               <VictoryZoomContainer
                 allowZoom={false}
