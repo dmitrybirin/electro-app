@@ -13,9 +13,10 @@ import { PlanResult } from './types';
 
 interface ChartProps {
   data: PlanResult;
+  center?: Date;
 }
 
-export const Chart: React.FC<ChartProps> = ({ data }) => {
+export const Chart: React.FC<ChartProps> = ({ data, center }) => {
   const chartData = getSolarChartData(data);
 
   return (
@@ -25,9 +26,10 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       scale={{ x: 'time', y: 'linear' }}
       containerComponent={
         <VictoryZoomContainer
+          disableContainerEvents
+          allowPan
           allowZoom={false}
-          zoomDomain={{ x: getGraphTimeRange() }}
-          allowPan={true}
+          zoomDomain={{ x: getGraphTimeRange(center) }}
         />
       }>
       <VictoryAxis
@@ -39,7 +41,6 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
         tickFormat={formatTimeTicks}
       />
       <VictoryAxis dependentAxis />
-
       <VictoryBar
         barWidth={24}
         horizontal={true}

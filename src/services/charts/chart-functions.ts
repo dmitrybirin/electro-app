@@ -20,9 +20,10 @@ export function getSolarChartData(planData: PlanResult): GraphData[] {
   });
 }
 
-export function getGraphTimeRange(): [Date, Date] {
+export function getGraphTimeRange(centerTime?: Date): [Date, Date] {
   const now = new Date();
-  return [addHours(now, -3), addHours(now, 3)];
+  const time = centerTime || now;
+  return [addHours(time, -3), addHours(time, 3)];
 }
 
 export function formatTimeTicks(tick: Date): string {
