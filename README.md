@@ -11,6 +11,8 @@ Overall work done:
 - data fetching implemented
 - graph shown
 
+I wasn't happy with result, therefore created separate branch with more work: [`more-time`](https://github.com/dmitrybirin/electro-app/tree/more-time)
+
 [Gifted charts](https://gifted-charts.web.app/linechart) used for the graph
 
 ![Simulator Screen Recording - iPhone 14 - 2022-12-10 at 15 48 06](https://user-images.githubusercontent.com/11785414/206858530-a3e55f75-3d62-4ea1-9a72-2f603781a16e.gif)
