@@ -1,36 +1,15 @@
 import React from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Chart } from './src/Chart';
-
-import { getSolarDataForNow } from './src/services/api';
-import { PlanResult } from './src/types';
+import { usePlanData } from './src/services/api';
 
 const App = () => {
-  const [solarData, setSolarData] = React.useState<PlanResult>({ real: [], plan: [] });
-  const [loading, setLoading] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
-
-  React.useEffect(() => {
-    setLoading(true);
-    getSolarDataForNow()
-      .then(result => {
-        if (result.success && result.data) {
-          setSolarData(result.data);
-        } else {
-          if (result.errorMessages) {
-            setErrorMessage(result.errorMessages[0]);
-          }
-        }
-      })
-      .catch(err => setErrorMessage(err))
-      .finally(() => setLoading(false));
-  }, []);
-
+  const { planData, loading, errorMessage } = usePlanData();
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.mainText}>Electro</Text>
       <Text style={styles.bodyText}>Planned solar production for the next 24 hours</Text>
-      {loading || !solarData.plan?.length ? <ActivityIndicator /> : <Chart data={solarData} />}
+      {loading || !planData.plan?.length ? <ActivityIndicator /> : <Chart data={planData} />}
       <Text style={styles.errorMessage}>{errorMessage}</Text>
     </SafeAreaView>
   );
