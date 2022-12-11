@@ -31,6 +31,7 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
         />
       }>
       <VictoryAxis
+        invertAxis={true}
         tickLabelComponent={
           <VictoryLabel backgroundPadding={4} style={[styles.labelTitle, styles.labelSubTitle]} />
         }
@@ -41,7 +42,11 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
 
       <VictoryBar
         barWidth={24}
+        horizontal={true}
         data={chartData}
+        style={{
+          data: { fill: 'darkblue' },
+        }}
         x="timestamp"
         y="solar"
         animate={{
