@@ -1,7 +1,7 @@
 interface BaseResponseData<T = any> {
   success: boolean;
   data: T | null;
-  errorMessages?: string[];
+  errorMessage?: string;
 }
 
 const request = async <T = any>(
@@ -13,9 +13,15 @@ const request = async <T = any>(
     if (!response.ok) {
       try {
         const errorData = await response.json();
-        return { success: false, errorMessages: errorData?.messages, data: null };
+        return {
+          success: false,
+          errorMessage: errorData?.messages?.length
+            ? errorData.messages.join('')
+            : JSON.stringify(errorData),
+          data: null,
+        };
       } catch (error: any) {
-        return { success: false, errorMessages: [error?.message || error.toString()], data: null };
+        return { success: false, errorMessage: error?.message || error.toString(), data: null };
       }
     } else {
       const data = await response.json();
