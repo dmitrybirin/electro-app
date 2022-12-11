@@ -9,18 +9,18 @@ Overall work done:
 - data fetching implemented
 - graph shown
 
-This was implemtented overall for 3 hours
+This was implemtented overall for 4 hours
 
 [Victory charts](https://formidable.com/open-source/victory) used for the graph
 
 
 Not done, but needed:
-- [ ] interactivity for the graph
-- [ ] icon for the app
-- [ ]tests for fetching and the data functions
+- [x] interactivity for the graph (possible to scroll, selecting the bar problematic, cause of bug in VictoryCharts)
+- [x] icon for the app
+- [ ] tests for fetching and the data functions
 - [x] use date-fns for dates
 - [x] check the actual data and dates :)
-- [ ] refactor different react components from App (for now it's not too much)
+- [x] refactor different react components from App (for now it's not too much)
 
 ## Instructions to run
 
