@@ -1,9 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from 'react-native';
-import { Chart } from './src/Chart';
-import { usePlanData } from './src/services/api';
+import { Chart } from './Chart';
+import { usePlanData } from './services/api';
 
-const App = () => {
+export const App = () => {
   const { planData, loading, errorMessage } = usePlanData();
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -39,5 +39,3 @@ const styles = StyleSheet.create({
     fontSize: 8,
   },
 });
-
-export default App;
