@@ -46,7 +46,7 @@ export const Chart: React.FC<ChartProps> = ({ data, center }) => {
         horizontal={true}
         data={chartData}
         style={{
-          data: { fill: 'darkblue' },
+          data: { fill: '#3F4AAB' },
         }}
         x="timestamp"
         y="solar"
