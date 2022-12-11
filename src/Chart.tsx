@@ -32,11 +32,7 @@ export const Chart: React.FC<ChartProps> = ({ data }) => {
       }>
       <VictoryAxis
         tickLabelComponent={
-          <VictoryLabel
-            backgroundPadding={8}
-            style={[styles.labelTitle, styles.labelSubTitle]}
-            angle={-45}
-          />
+          <VictoryLabel backgroundPadding={4} style={[styles.labelTitle, styles.labelSubTitle]} />
         }
         tickValues={chartData.map(point => point.timestamp)}
         tickFormat={formatTimeTicks}
